@@ -1,0 +1,15 @@
+{
+  "name": "maunoslack",
+  "version": "1.0.0",
+  "description": "Pipe stuff from one IRC channel to another",
+  "main": "maunoslack.js",
+  "dependencies": {
+    "irc": "^0.4.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Juho Vähä-Herttua",
+  "license": "MIT"
+}

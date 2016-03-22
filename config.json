@@ -1,0 +1,25 @@
+{
+  "servers":[{
+    "nick": "pipetest",
+    "server": "irc.stealth.net",
+    "channel": "#pipetest",
+    "options": {
+      "userName": "pipetest",
+      "realName": "pipetest",
+      "port": 6667,
+      "debug": true,
+      "channelPrefixes": "&#!"
+    }
+  },{
+    "nick": "pipetest2",
+    "server": "irc.stealth.net",
+    "channel": "#pipetest2",
+    "options": {
+      "userName": "pipetest2",
+      "realName": "pipetest2",
+      "port": 6667,
+      "debug": true,
+      "channelPrefixes": "&#!"
+    }
+  }]
+}
