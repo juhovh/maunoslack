@@ -3,30 +3,34 @@ var servers = require('./config.json').servers;
 
 function setupListeners(fromClient, fromChannel, fromNick, toClient, toChannel, toNick) {
   fromClient.addListener('message', function(from, to, message) {
-    if (from !== fromNick) {
-      toClient.say(toChannel, '<' + from + '> ' + message);
-    }
+    if (from === fromNick) return;
+
+    toClient.say(toChannel, '<' + from + '> ' + message);
   });
   fromClient.addListener('topic', function(channel, topic, nick) {
-    if (nick !== fromNick) {
-      toClient.send('TOPIC', toChannel, topic);
-      toClient.action(toChannel, 'Topic changed by ' + nick);
-    }
+    if (nick === fromNick) return;
+
+    toClient.send('TOPIC', toChannel, topic);
+    toClient.action(toChannel, 'Topic changed by ' + nick);
   });
   fromClient.addListener('join', function(channel, nick) {
-    if (nick !== fromNick) {
-      toClient.action(toChannel, nick + ' has joined');
-    }
+    if (nick === fromNick) return;
+
+    toClient.action(toChannel, nick + ' has joined');
   });
   fromClient.addListener('part', function(channel, nick, reason) {
-    if (nick !== fromNick) {
+    if (nick === fromNick) return;
+
+    if (reason) {
       toClient.action(toChannel, nick + ' has parted: ' + reason);
+    } else {
+      toClient.action(toChannel, nick + ' has parted');
     }
   });
   fromClient.addListener('quit', function(nick, reason) {
-    if (nick !== fromNick) {
-      toClient.action(toChannel, nick + ' has quit: ' + reason);
-    }
+    if (nick === fromNick) return;
+
+    toClient.action(toChannel, nick + ' has quit: ' + reason);
   });
   fromClient.addListener('error', function(message) {
     console.log('error: ' + message);
