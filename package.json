@@ -4,7 +4,9 @@
   "description": "Pipe stuff from one IRC channel to another",
   "main": "maunoslack.js",
   "dependencies": {
-    "irc": "^0.4.1"
+    "irc": "^0.4.1",
+    "node-fetch": "^1.5.2",
+    "es6-promise": "^3.1.2"
   },
   "devDependencies": {},
   "scripts": {
