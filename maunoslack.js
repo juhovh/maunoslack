@@ -1,38 +1,38 @@
 var irc = require('irc');
 var servers = require('./config.json').servers;
 
-function setupListeners(fromClient, fromChannel, fromNick, toClient, toChannel, toNick) {
-  fromClient.addListener('message', function(from, to, message) {
-    if (from === fromNick) return;
+function setupListeners(fromConfig, toConfig) {
+  fromConfig.client.addListener('message', function(from, to, message) {
+    if (from === fromConfig.nick) return;
 
-    toClient.say(toChannel, '<' + from + '> ' + message);
+    toConfig.client.say(toConfig.channel, '<' + from + '> ' + message);
   });
-  fromClient.addListener('topic', function(channel, topic, nick) {
-    if (nick === fromNick) return;
+  fromConfig.client.addListener('topic', function(channel, topic, nick) {
+    if (nick === fromConfig.nick) return;
 
-    toClient.send('TOPIC', toChannel, topic);
-    toClient.action(toChannel, 'Topic changed by ' + nick);
+    toConfig.client.send('TOPIC', toConfig.channel, topic);
+    toConfig.client.action(toConfig.channel, 'Topic changed by ' + nick);
   });
-  fromClient.addListener('join', function(channel, nick) {
-    if (nick === fromNick) return;
+  fromConfig.client.addListener('join', function(channel, nick) {
+    if (nick === fromConfig.nick) return;
 
-    toClient.action(toChannel, nick + ' has joined');
+    toConfig.client.action(toConfig.channel, nick + ' has joined');
   });
-  fromClient.addListener('part', function(channel, nick, reason) {
-    if (nick === fromNick) return;
+  fromConfig.client.addListener('part', function(channel, nick, reason) {
+    if (nick === fromConfig.nick) return;
 
     if (reason) {
-      toClient.action(toChannel, nick + ' has parted: ' + reason);
+      toConfig.client.action(toConfig.channel, nick + ' has parted: ' + reason);
     } else {
-      toClient.action(toChannel, nick + ' has parted');
+      toConfig.client.action(toConfig.channel, nick + ' has parted');
     }
   });
-  fromClient.addListener('quit', function(nick, reason) {
-    if (nick === fromNick) return;
+  fromConfig.client.addListener('quit', function(nick, reason) {
+    if (nick === fromConfig.nick) return;
 
-    toClient.action(toChannel, nick + ' has quit: ' + reason);
+    toConfig.client.action(toConfig.channel, nick + ' has quit: ' + reason);
   });
-  fromClient.addListener('error', function(message) {
+  fromConfig.client.addListener('error', function(message) {
     console.log('error: ' + message);
   });
 }
@@ -48,6 +48,6 @@ servers.forEach(function(config, idx) {
   targets.splice(idx, 1);
   targets.forEach(function(target) {
     console.log('Setting up', config.channel, config.nick, target.channel, target.nick);
-    setupListeners(config.client, config.channel, config.nick, target.client, target.channel, target.nick);
+    setupListeners(config, target);
   });
 });
