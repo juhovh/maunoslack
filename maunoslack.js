@@ -59,7 +59,11 @@ function setupListeners(fromConfig, toConfig) {
   fromConfig.client.addListener('topic', function(channel, topic, nick) {
     if (nick === fromConfig.nick) return;
 
-    toConfig.client.send('TOPIC', toConfig.channel, topic);
+    if (topic) {
+      toConfig.client.send('TOPIC', toConfig.channel, topic);
+    } else {
+      toConfig.client.send('TOPIC', toConfig.channel, "");
+    }
     toConfig.client.action(toConfig.channel, 'Topic changed by ' + nick);
   });
   fromConfig.client.addListener('join', function(channel, nick) {
